@@ -648,14 +648,20 @@ function openBox() {
   // Opening sound effect
   playOpenSound();
 
+  // Trigger YouTube play IMMEDIATELY within the user gesture (before any setTimeout)
+  // Browsers drop audio permission after ~100ms — must call here, not in a timer
+  if (window._ytPlayer) {
+    try {
+      window._ytPlayer.unMute();
+      window._ytPlayer.setVolume(100);
+      window._ytPlayer.playVideo();
+    } catch(e){}
+  }
+
   setTimeout(()=>{
     stage.style.display='none';
     const panel=document.getElementById('giftPanel');
     panel.classList.add('visible');
-    // Play via IFrame API — called within user gesture so autoplay is allowed
-    if (window._ytPlayer) {
-      try { window._ytPlayer.playVideo(); } catch(e){}
-    }
   }, 720);
 }
 
