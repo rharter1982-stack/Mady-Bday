@@ -645,17 +645,15 @@ function openBox() {
   // Opening sound effect
   playOpenSound();
 
+  // Inject YouTube iframe NOW (within user gesture) so autoplay is allowed
+  document.getElementById('ytWrapper').innerHTML =
+    '<iframe src="https://www.youtube.com/embed/iz9DapchJ2s?autoplay=1&rel=0" title="MCR Happy Birthday" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+
   setTimeout(()=>{
     stage.style.display='none';
     const panel=document.getElementById('giftPanel');
     panel.classList.add('visible');
   }, 720);
-
-  // Load YouTube after user gesture so autoplay is allowed
-  setTimeout(()=>{
-    document.getElementById('ytWrapper').innerHTML =
-      '<iframe src="https://www.youtube.com/embed/iz9DapchJ2s?autoplay=1&rel=0" title="MCR Happy Birthday" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-  }, 900);
 }
 
 /* ── Opening sound effect ── */
