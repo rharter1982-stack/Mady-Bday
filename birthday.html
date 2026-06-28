@@ -210,17 +210,14 @@
        GIFT PANEL
     ═══════════════════════════════════════ */
     .gift-panel {
-      display:flex; flex-direction:column;
+      display:none; flex-direction:column;
       background:rgba(255,255,255,.06); backdrop-filter:blur(20px);
       -webkit-backdrop-filter:blur(20px);
       border:1px solid rgba(255,255,255,.12); border-radius:24px;
       overflow:hidden; box-shadow:0 12px 60px rgba(0,0,0,.5);
-      opacity:0; pointer-events:none;
-      max-height:0; overflow:hidden;
     }
     .gift-panel.visible {
-      opacity:1; pointer-events:auto;
-      max-height:9999px; overflow:visible;
+      display:flex;
       animation:popIn .65s cubic-bezier(.175,.885,.32,1.275) both;
     }
     @keyframes popIn {
@@ -648,36 +645,15 @@ function openBox() {
   // Opening sound effect
   playOpenSound();
 
-  // Trigger YouTube play IMMEDIATELY within the user gesture (before any setTimeout)
-  // Browsers drop audio permission after ~100ms — must call here, not in a timer
-  if (window._ytPlayer) {
-    try {
-      window._ytPlayer.unMute();
-      window._ytPlayer.setVolume(100);
-      window._ytPlayer.playVideo();
-    } catch(e){}
-  }
-
   setTimeout(()=>{
     stage.style.display='none';
     const panel=document.getElementById('giftPanel');
     panel.classList.add('visible');
+    // Load the YouTube player now that the panel is visible
+    document.getElementById('ytWrapper').innerHTML =
+      '<iframe src="https://www.youtube.com/embed/iz9DapchJ2s?rel=0" title="MCR Happy Birthday" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }, 720);
 }
-
-/* ── YouTube IFrame API ── */
-(function(){
-  var s = document.createElement('script');
-  s.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(s);
-})();
-window.onYouTubeIframeAPIReady = function() {
-  window._ytPlayer = new YT.Player('ytWrapper', {
-    videoId: 'iz9DapchJ2s',
-    playerVars: { autoplay: 0, rel: 0, modestbranding: 1 },
-    events: { onReady: function(){} }
-  });
-};
 
 /* ── Opening sound effect ── */
 function playOpenSound() {
